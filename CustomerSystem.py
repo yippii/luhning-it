@@ -18,8 +18,8 @@ def printMenu():
     
 
 def parseCSV(file):
-    with open(file=file, mode='r', newline='') as csv_file:
-        csv_data = csv.reader(csv_file, delimiter='|')
+    with open(file=file, mode='r', newline='', encoding='utf-8', errors='replace') as csv_file:
+        csv_data = [ list(row) for row in csv.reader(csv_file)]
         return csv_data
 
 print(parseCSV("postal_codes.csv"))
