@@ -119,7 +119,8 @@ generateCustomerOption = "2"
 exitCondition = "9"
 
 # More variables for the main may be declared in the space below
-
+#TODO: Move this to the function for checking postal codes after done making it
+postalCodes = parseCSV("postal_codes.csv")
 
 while userInput != exitCondition:
     printMenu()                 # Printing out the main menu
