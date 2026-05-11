@@ -19,10 +19,15 @@ def printMenu():
 
 def parseCSV(file):
     with open(file=file, mode='r', newline='', encoding='utf-8', errors='replace') as csv_file:
-        csv_data = [ list(row) for row in csv.reader(csv_file)]
+        # Take the file and separate with |
+        csv_data = list(csv.reader(csv_file, delimiter="|"))
+
+        # Remove header
+        csv_data.pop(0)
+
+        csv_data = [row[0] for row in csv_data]
         return csv_data
 
-print(parseCSV("postal_codes.csv"))
 
 def luhn_check(numbers):
     """
@@ -118,7 +123,7 @@ exitCondition = "9"
 
 while userInput != exitCondition:
     printMenu()                 # Printing out the main menu
-    userInput = input();        # User selection from the menu
+    userInput = input()        # User selection from the menu
 
     if userInput == enterCustomerOption:
         # Only the line below may be editted based on the parameter list and how you design the method return
