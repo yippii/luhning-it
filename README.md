@@ -68,7 +68,7 @@ The system generates IDs based on the sequence and name:
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/luhn-customer-system.git
+git clone https://github.com/yippii/luhning-it.git
 
 ```
 
@@ -77,8 +77,7 @@ git clone https://github.com/yourusername/luhn-customer-system.git
 3. **Run the application:**
 
 ```bash
-    javac Main.java && java Main  # For Java
-    python main.py                # For Python
+    python main.py
     ```
 4.  **Exporting Data:** Choose option `2` in the menu to save your data to a custom `.csv` file.
 
