@@ -79,8 +79,13 @@ def enterCustomerInfo():
     You may place as many or as few parameters as needed
     This function may also be broken down further depending on your algorithm/approach
 '''
-def validatePostalCode():
-    pass    # Remove this pass statement and add your own code below
+def validatePostalCode(postal_code, valid_list):
+    # Rules: Min 3 chars, and first 3 must match the provided CSV list.
+    if len(postal_code) < 3:
+        return False
+    
+    prefix = postal_code[:3].upper()
+    return prefix in valid_list
 
 '''
     This function is to be edited to achieve the task.
