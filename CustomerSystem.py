@@ -7,13 +7,13 @@ import csv
 
 def printMenu():
     print('''
-          Customer and Sales System\n
-          1. Enter Customer Information\n
-          2. Generate Customer data file\n
-          3. Report on total Sales (Not done in this part)\n
-          4. Check for fraud in sales data (Not done in this part)\n
-          9. Quit\n
-          Enter menu option (1-9)
+    Customer and Sales System\n
+       1. Enter Customer Information\n
+       2. Generate Customer data file\n
+       3. Report on total Sales (Not done in this part)\n
+       4. Check for fraud in sales data (Not done in this part)\n
+       9. Quit\n
+       Enter menu option (1-9)
           ''')
     
 
@@ -71,7 +71,61 @@ def luhn_check(numbers):
     This function may also be broken down further depending on your algorithm/approach
 '''
 def enterCustomerInfo():
-    pass    # Remove this pass statement and add your own code below
+    first_name_valid = False
+    last_name_valid = False
+    postal_code_valid = False
+    credit_card_valid = False
+    date_of_birth_valid = False
+
+    while first_name_valid == False:
+        FirstName = input("Enter customer's first name\n: ")
+        if FirstName.strip() == "":
+             print("Invalid first name. Please try again.")
+        elif " " in FirstName:
+             print("Invalid first name. Please try again.")
+        else:
+             first_name_valid = True
+
+    while last_name_valid == False:
+        LastName = input("Enter customer's last name\n: ")
+        if LastName.strip() == "":
+            print("Invalid last name. Please try again.")
+        elif " " in LastName:
+            print("Invalid last name. Please try again.")
+        else:
+            last_name_valid = True
+
+    #City = input("Enter customer's city\n: ") - Do we need this?
+
+    while date_of_birth_valid == False:
+        DateOfBirth = input("Enter customer's date of birth (YYYY-MM-DD)\n: ")
+        if len(DateOfBirth) != 10:
+            print("Invalid date of birth. Please try again.")
+        elif DateOfBirth[4] != '-' or DateOfBirth[7] != '-':
+            print("Invalid date of birth. Please try again.")
+        else:
+            date_of_birth_valid = True
+
+    Adress = input("Enter customer's address\n: ")
+    #idk what to do with address rn
+
+    while postal_code_valid == False:
+        PostalCode = input("Enter customer's postal code\n: ")
+        if len(PostalCode) < 3:
+            print("Invalid postal code. Please try again.")
+        elif validatePostalCode(PostalCode, postalCodes) == False:
+            print("Invalid postal code. Please try again.")
+        else:
+            postal_code_valid = True
+
+    while credit_card_valid == False:
+        CreditCardNumber = input("Enter customer's credit card number\n: ")
+        if len(CreditCardNumber) < 9:
+            print("Invalid credit card number. Please try again.")
+        #elif validateCreditCard(CreditCardNumber) == False:
+            #print("Invalid credit card number. Please try again.")
+        else:
+            credit_card_valid = True
 
 '''
     This function is to be edited to achieve the task.
@@ -129,7 +183,7 @@ postalCodes = parseCSV("postal_codes.csv")
 
 while userInput != exitCondition:
     printMenu()                 # Printing out the main menu
-    userInput = input()        # User selection from the menu
+    userInput = input(": ")   # User selection from the menu
 
     if userInput == enterCustomerOption:
         # Only the line below may be editted based on the parameter list and how you design the method return
