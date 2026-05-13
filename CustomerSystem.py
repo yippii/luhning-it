@@ -1,17 +1,30 @@
-# Throughout this project, the use of data structures are not permitted
-# Minimal built in functions are to be used and the majority of functions must be
-# created yourself
-
-# More packages may be imported in the space below if approved by your instructor
 import csv
+import os
+import subprocess
+import time
 
-number = int()
 customerInfo = list()
+
+# Get line count to get amount of customer
+try:
+    customer_info_file = open(file="customer_info.csv", mode='r', newline='', encoding='utf-8', errors='replace')
+except FileNotFoundError:
+    customer_info_file = open("customer_info.csv", mode='w+', newline='', encoding='utf-8', errors='replace')
+
+customer_number = sum(1 for line in customer_info_file)
+
+customer_number += 1 if customer_number == 0 else 0
+
+customer_info_file.close()
+
 
 def printMenu() -> None:
     """
     Print the menu options for the Customer System
     """
+
+    clearScreen()
+
     print('''
           Customer and Sales System\n
           1. Enter Customer Information\n
@@ -21,12 +34,20 @@ def printMenu() -> None:
           9. Quit\n
           Enter menu option (1-9)
           ''')
-    
+
+
+def clearScreen() -> None:
+    """
+    Helper function to clear screen on terminal
+    """
+    subprocess.call(["cls" if os.name == "nt" else "clear"])
+
 
 def parseCSV(file: str) -> list[str]:
     """
     Parse a CSV file and return into a list of rows in a list of CSV values
     """
+
     with open(file=file, mode='r', newline='', encoding='utf-8', errors='replace') as csv_file:
         # Take the file and separate with |
         csv_data = list(csv.reader(csv_file, delimiter="|"))
@@ -43,6 +64,9 @@ def luhn_check(numbers: str) -> bool:
     Check if the numbers are valid through the luhn algorithm
     """
 
+    if not numbers.isdigit():
+        return False
+
     # Initial variable to store the total for the check
     total = 0
 
@@ -53,20 +77,20 @@ def luhn_check(numbers: str) -> bool:
     numbers = numbers[:-1]
 
     # Luhn algorithm - Step 3: Loop through all the numbers and double every second digit
-    for i, number in enumerate(reversed(numbers)):
+    for i, digit in enumerate(reversed(numbers)):
         # Numbers that are doubled
         if i % 2 == 0:
-            number = int(number) * 2
+            digit = int(digit) * 2
 
             # If doubled numbers are more than 9, make them single digit
-            if number > 9:
-                string_number = str(number)
-                number = int(string_number[0]) + int(string_number[1])
+            if digit > 9:
+                string_number = str(digit)
+                digit = int(string_number[0]) + int(string_number[1])
 
-            total += number
+            total += digit
         else:
             # Numbers that aren't doubled
-            total += int(number)
+            total += int(digit)
 
     # Luhn algorithm - Step 4: Check with modulo 10 with the excluded last digit
     # If it is 0, then it is valid through the Luhn Algorithm
@@ -76,11 +100,39 @@ def enterCustomerInfo() -> None:
     """
     Provide a prompt for users to enter customer information
     """
-    global number
 
-    firstName = input("Please enter first name: ")
-    lastName = input("Please enter last name: ")
-    city = input("Please enter city: ")
+    global customer_number
+
+    clearScreen()
+
+    # Create or read file
+    try:
+        customer_info_file = open(file="customer_info.csv", mode='r', newline='', encoding='utf-8', errors='replace')
+    except FileNotFoundError:
+        customer_info_file = open("customer_info.csv", mode='w+', newline='', encoding='utf-8', errors='replace')
+
+    print(f"Customer number: {customer_number}")
+
+    while True:
+        firstName = input("Please enter first name: ")
+        if firstName != "":
+            break
+        else:
+            print("Please enter your first name")
+
+    while True:
+        lastName = input("Please enter last name: ")
+        if lastName != "":
+            break
+        else:
+            print("Please enter your last name")
+
+    while True:
+        city = input("Please enter city: ")
+        if city != "":
+            break
+        else:
+            print("Please enter your city")
 
     while True:
         postalCode = input("Please enter postal code: ")
@@ -96,20 +148,35 @@ def enterCustomerInfo() -> None:
         else:
             print("Please enter a valid credit card number")
 
-    name = f"{number}{firstName[:2]}{lastName[:2]}"
+    # Increment customer number by 1 after completing the operation
+    name = f"{customer_number}{firstName.lower()[:2]}{lastName.lower()[:2]}"
+    customerInfo.append([name, firstName.lower().capitalize(), lastName.lower().capitalize(), city.lower().capitalize(), postalCode.upper(), credit_card_number])
+    customer_number += 1
 
-    customerInfo.append([credit_card_number])
 
 def validatePostalCode(postal_code: str) -> bool:
     postalCodes = parseCSV("postal_codes.csv")
     return postal_code[:3].upper() in postalCodes
 
+
 def validateCreditCard(credit_card_number: str) -> bool:
     return luhn_check(credit_card_number)
 
-def generateCustomerDataFile(content: list[str], filename: str, location: str) -> None:
-    with open(file=filename, mode='w', newline='', encoding='utf-8', errors='replace') as csv_file:
-        csv.writer(csv_file).writerows(content)
+
+def generateCustomerDataFile(content: list[str], filename: str) -> None:
+    if customerInfo:
+        try:
+            with open(file=filename, mode='a', newline='', encoding='utf-8', errors='replace') as csv_file:
+                if os.path.getsize(filename) == 0:
+                    csv.writer(csv_file, delimiter='|').writerow(["Customer ID", "First Name", "Last Name", "City", "Postal Code"])
+
+                csv.writer(csv_file).writerows(content)
+                content.clear()
+        except FileNotFoundError:
+            open(file=filename, mode='w', newline='', encoding='utf-8', errors='replace').close()
+    else:
+        print("Please enter customer information before using this function")
+        time.sleep(1)
 
 # Do not edit any of these variables
 userInput = ""
@@ -117,24 +184,22 @@ enterCustomerOption = "1"
 generateCustomerOption = "2"
 exitCondition = "9"
 
-# More variables for the main may be declared in the space below
-postalCodes = parseCSV("postal_codes.csv")
-
 while userInput != exitCondition:
-    printMenu()                 # Printing out the main menu
-    userInput = input(": ")   # User selection from the menu
+    printMenu()
+    userInput = input("-> ")
 
     if userInput == enterCustomerOption:
-        # Only the line below may be edited based on the parameter list and how you design the method return
-        # Any necessary variables may be added to this if section, but nowhere else in the code
         enterCustomerInfo()
 
     elif userInput == generateCustomerOption:
-        # Only the line below may be edited based on the parameter list and how you design the method return
-        generateCustomerDataFile()
+        generateCustomerDataFile(customerInfo, "customer_info.csv")
+
+    elif userInput == exitCondition:
+        break
 
     else:
-        print("Please type in a valid option (A number from 1-9)")
+        print("\nPlease type in a valid option (A number from 1-9)")
+        time.sleep(1)
 
 #Exits once the user types
 print("Program Terminated")
