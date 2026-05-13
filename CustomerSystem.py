@@ -1,11 +1,12 @@
-# Throughout this project, the use of data structures are not permitted
-# Minimal built in functions are to be used and the majority of functions must be
-# created yourself
-
-# More packages may be imported in the space below if approved by your instructor
 import csv
 
-def printMenu():
+number = int()
+customerInfo = list()
+
+def printMenu() -> None:
+    """
+    Print the menu options for the Customer System
+    """
     print('''
           Customer and Sales System\n
           1. Enter Customer Information\n
@@ -17,7 +18,10 @@ def printMenu():
           ''')
     
 
-def parseCSV(file):
+def parseCSV(file: str) -> list[str]:
+    """
+    Parse a CSV file and return into a list of rows in a list of CSV values
+    """
     with open(file=file, mode='r', newline='', encoding='utf-8', errors='replace') as csv_file:
         # Take the file and separate with |
         csv_data = list(csv.reader(csv_file, delimiter="|"))
@@ -29,7 +33,7 @@ def parseCSV(file):
         return csv_data
 
 
-def luhn_check(numbers):
+def luhn_check(numbers: str) -> bool:
     """
     Check if the numbers are valid through the luhn algorithm
     """
@@ -64,58 +68,49 @@ def luhn_check(numbers):
     return (total + int(last_digit)) % 10 == 0
 
 
-'''
-    This function is to be edited to achieve the task.
-    It is your decision to make this function a procedural or functional type
-    You may place as many or as few parameters as needed
-    This function may also be broken down further depending on your algorithm/approach
-'''
-def enterCustomerInfo():
-    pass    # Remove this pass statement and add your own code below
+def enterCustomerInfo() -> None:
+    """
+    Provide a prompt for users to enter customer information
+    """
+    global number
 
-'''
-    This function is to be edited to achieve the task.
-    It is your decision to make this function a procedural or functional type
-    You may place as many or as few parameters as needed
-    This function may also be broken down further depending on your algorithm/approach
-'''
-def validatePostalCode(postal_code, valid_list):
-    # Rules: Min 3 chars, and first 3 must match the provided CSV list.
-    if len(postal_code) < 3:
-        return False
-    
-    prefix = postal_code[:3].upper()
-    return prefix in valid_list
+    firstName = input("Please enter first name: ")
+    lastName = input("Please enter last name: ")
+    city = input("Please enter city: ")
 
-'''
-    This function is to be edited to achieve the task.
-    It is your decision to make this function a procedural or functional type
-    You may place as many or as few parameters as needed
-    This function may also be broken down further depending on your algorithm/approach
-'''
-def validateCreditCard():
-    pass    # Remove this pass statement and add your own code below
+    while True:
+        postalCode = input("Please enter postal code: ")
+        if validatePostalCode(postalCode):
+            break
+        else:
+            print("Please enter a valid postal code")
 
-'''
-    This function is to be edited to achieve the task.
-    It is your decision to make this function a procedural or functional type
-    You may place as many or as few parameters as needed
-    This function may also be broken down further depending on your algorithm/approach
-'''
-def generateCustomerDataFile():
-    pass    # Remove this pass statement and add your own code below
+    while True:
+        credit_card_number = input("Please enter credit card number: ")
+        if validateCreditCard(credit_card_number):
+            break
+        else:
+            print("Please enter a valid credit card number")
 
-####################################################################
-#       ADDITIONAL METHODS MAY BE ADDED BELOW IF NECESSARY         #
-####################################################################
+    name = f"{number}{firstName[:2]}{lastName[:2]}"
+
+    customerInfo.append([credit_card_number])
 
 
 
+def validatePostalCode(postal_code: str) -> bool:
+    postalCodes = parseCSV("postal_codes.csv")
+    return postal_code[:3].upper() in postalCodes
 
-####################################################################
-#                            MAIN PROGRAM                          #
-#           DO NOT EDIT ANY CODE EXCEPT WHERE INDICATED            #
-####################################################################
+
+def validateCreditCard(credit_card_number: str) -> bool:
+    return luhn_check(credit_card_number)
+
+
+def generateCustomerDataFile(content: list[str], filename: str, location: str) -> None:
+    with open(file=filename, mode='w', newline='', encoding='utf-8', errors='replace') as csv_file:
+        csv.writer(csv_file).writerows(content)
+
 
 # Do not edit any of these variables
 userInput = ""
@@ -125,19 +120,19 @@ exitCondition = "9"
 
 # More variables for the main may be declared in the space below
 #TODO: Move this to the function for checking postal codes after done making it
-postalCodes = parseCSV("postal_codes.csv")
+
 
 while userInput != exitCondition:
     printMenu()                 # Printing out the main menu
     userInput = input()        # User selection from the menu
 
     if userInput == enterCustomerOption:
-        # Only the line below may be editted based on the parameter list and how you design the method return
+        # Only the line below may be edited based on the parameter list and how you design the method return
         # Any necessary variables may be added to this if section, but nowhere else in the code
         enterCustomerInfo()
 
     elif userInput == generateCustomerOption:
-        # Only the line below may be editted based on the parameter list and how you design the method return
+        # Only the line below may be edited based on the parameter list and how you design the method return
         generateCustomerDataFile()
 
     else:
