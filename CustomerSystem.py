@@ -1,3 +1,8 @@
+# Throughout this project, the use of data structures are not permitted
+# Minimal built in functions are to be used and the majority of functions must be
+# created yourself
+
+# More packages may be imported in the space below if approved by your instructor
 import csv
 
 number = int()
@@ -67,7 +72,6 @@ def luhn_check(numbers: str) -> bool:
     # If it is 0, then it is valid through the Luhn Algorithm
     return (total + int(last_digit)) % 10 == 0
 
-
 def enterCustomerInfo() -> None:
     """
     Provide a prompt for users to enter customer information
@@ -96,21 +100,16 @@ def enterCustomerInfo() -> None:
 
     customerInfo.append([credit_card_number])
 
-
-
 def validatePostalCode(postal_code: str) -> bool:
     postalCodes = parseCSV("postal_codes.csv")
     return postal_code[:3].upper() in postalCodes
 
-
 def validateCreditCard(credit_card_number: str) -> bool:
     return luhn_check(credit_card_number)
-
 
 def generateCustomerDataFile(content: list[str], filename: str, location: str) -> None:
     with open(file=filename, mode='w', newline='', encoding='utf-8', errors='replace') as csv_file:
         csv.writer(csv_file).writerows(content)
-
 
 # Do not edit any of these variables
 userInput = ""
@@ -119,12 +118,11 @@ generateCustomerOption = "2"
 exitCondition = "9"
 
 # More variables for the main may be declared in the space below
-#TODO: Move this to the function for checking postal codes after done making it
-
+postalCodes = parseCSV("postal_codes.csv")
 
 while userInput != exitCondition:
     printMenu()                 # Printing out the main menu
-    userInput = input()        # User selection from the menu
+    userInput = input(": ")   # User selection from the menu
 
     if userInput == enterCustomerOption:
         # Only the line below may be edited based on the parameter list and how you design the method return
