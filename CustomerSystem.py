@@ -3,21 +3,21 @@ import os
 import subprocess
 import time
 
+
 customerInfo = list()
+
 
 # Get line count to get amount of customer
 try:
     customer_info_file = open(file="customer_info.csv", mode='r', newline='', encoding='utf-8', errors='replace')
 except FileNotFoundError:
     customer_info_file = open("customer_info.csv", mode='w+', newline='', encoding='utf-8', errors='replace')
-
 customer_number = sum(1 for line in customer_info_file)
-
 customer_number += 1 if customer_number == 0 else 0
-
 customer_info_file.close()
 
 
+# Called by main application
 def printMenu() -> None:
     """
     Print the menu options for the Customer System
@@ -36,6 +36,7 @@ def printMenu() -> None:
           ''')
 
 
+# Called by printMenu() and enterCustomerInfo()
 def clearScreen() -> None:
     """
     Helper function to clear screen on terminal
@@ -43,6 +44,7 @@ def clearScreen() -> None:
     subprocess.call(["cls" if os.name == "nt" else "clear"])
 
 
+# Called by checkPostalCode()
 def parseCSV(file: str) -> list[str]:
     """
     Parse a CSV file and return into a list of rows in a list of CSV values
@@ -59,6 +61,7 @@ def parseCSV(file: str) -> list[str]:
         return csv_data
 
 
+# Called by validateCreditCard()
 def luhn_check(numbers: str) -> bool:
     """
     Check if the numbers are valid through the luhn algorithm
@@ -96,6 +99,8 @@ def luhn_check(numbers: str) -> bool:
     # If it is 0, then it is valid through the Luhn Algorithm
     return (total + int(last_digit)) % 10 == 0
 
+
+# Called by main application through option 1
 def enterCustomerInfo() -> None:
     """
     Provide a prompt for users to enter customer information
@@ -110,8 +115,6 @@ def enterCustomerInfo() -> None:
         customer_info_file = open(file="customer_info.csv", mode='r', newline='', encoding='utf-8', errors='replace')
     except FileNotFoundError:
         customer_info_file = open("customer_info.csv", mode='w+', newline='', encoding='utf-8', errors='replace')
-
-    print(f"Customer number: {customer_number}")
 
     while True:
         firstName = input("Please enter first name: ")
@@ -154,15 +157,22 @@ def enterCustomerInfo() -> None:
     customer_number += 1
 
 
+# Called by enterCustomerInfo()
 def validatePostalCode(postal_code: str) -> bool:
+    """
+    Validate a postal code by comparing and check if it inside the CSV file
+    """
     postalCodes = parseCSV("postal_codes.csv")
     return postal_code[:3].upper() in postalCodes
 
 
+# Wrapper function to allow better descriptions for both functions
+# Called by enterCustomerInfo()
 def validateCreditCard(credit_card_number: str) -> bool:
     return luhn_check(credit_card_number)
 
 
+# Called by main application through option 2
 def generateCustomerDataFile(content: list[str], filename: str) -> None:
     if customerInfo:
         try:
@@ -178,7 +188,7 @@ def generateCustomerDataFile(content: list[str], filename: str) -> None:
         print("Please enter customer information before using this function")
         time.sleep(1)
 
-# Do not edit any of these variables
+
 userInput = ""
 enterCustomerOption = "1"
 generateCustomerOption = "2"
