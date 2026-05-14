@@ -27,6 +27,7 @@ jobs:
           mode: app
           include-module: pygame.mixer
           enable-plugins: tk-inter
+          include-data-files: '*.csv=postal_codes.csv'
           output-dir: .
           output-file: customer-system
           enable-console: true
@@ -37,5 +38,5 @@ jobs:
         with:
           name: Application Executable - ${{matrix.os}}
           path: | 
-            ${{ matrix.os == 'windows-latest' && '*.exe' || matrix.os == 'ubuntu-latest' && 'fate-crimson-isle' || matrix.os == 'macos-latest' && '*.app' }}
-            F4T3.mp3
+            ${{ matrix.os == 'windows-latest' && '*.exe' || matrix.os == 'ubuntu-latest' && 'customer-system' || matrix.os == 'macos-latest' && '*.app' }}
+            postal_codes.csv
