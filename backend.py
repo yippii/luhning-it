@@ -197,6 +197,7 @@ def validatePostalCode(postal_code: str) -> bool:
     try:
         if "__compiled__" in globals():
             path = os.path.dirname(sys.executable)+"/postal_codes.csv"
+            print(f"Detected Nuitka Compiled Application, using {path} instead")
         else:
             path = "postal_codes.csv"
         postalCodes = parseCSV(path)
