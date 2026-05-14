@@ -1,5 +1,6 @@
 import csv
 import os
+import sys
 import subprocess
 from datetime import datetime
 
@@ -194,7 +195,11 @@ def validatePostalCode(postal_code: str) -> bool:
     Validate a postal code by comparing and check if it inside the CSV file
     """
     try:
-        postalCodes = parseCSV("postal_codes.csv")
+        if "__compiled__" in globals():
+            path = os.path.dirname(sys.executable)+"/postal_codes.csv"
+        else:
+            path = "postal_codes.csv"
+        postalCodes = parseCSV(path)
     except FileNotFoundError:
         raise GUIError("Please check if postal_codes.csv exists")
     return postal_code[:3].upper() in postalCodes
