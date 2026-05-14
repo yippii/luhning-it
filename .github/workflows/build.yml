@@ -30,7 +30,6 @@ jobs:
           include-data-files: '*.csv=postal_codes.csv'
           output-dir: .
           output-file: customer-system
-          enable-console: true
           macos-app-name: "Customer System"
           
       - name: Uploading artifact
