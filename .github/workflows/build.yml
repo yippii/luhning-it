@@ -23,7 +23,7 @@ jobs:
         uses: Nuitka/Nuitka-Action@main
         with:
           nuitka-version: main
-          script-name: frontend.py
+          script-name: customer-system.py
           mode: app
           include-module: pygame.mixer
           enable-plugins: tk-inter
@@ -39,4 +39,3 @@ jobs:
           name: Application Executable - ${{matrix.os}}
           path: | 
             ${{ matrix.os == 'windows-latest' && '*.exe' || matrix.os == 'ubuntu-latest' && 'customer-system' || matrix.os == 'macos-latest' && '*.app' }}
-            postal_codes.csv
