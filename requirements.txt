@@ -1,1 +1,2 @@
 sv_ttk~=2.6.1
+pygame-ce~=2.5.7
