@@ -1,3 +1,4 @@
+import os.path
 import tkinter as tk
 from tkinter import font
 from tkinter import ttk
@@ -24,8 +25,8 @@ class GUI(tk.Tk):
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
         x = (screen_width // 2) - (700 // 2)
-        y = (screen_height // 2) - (500 // 2)
-        self.geometry(f"{700}x{500}+{x}+{y - 50}")
+        y = (screen_height // 2) - (600 // 2)
+        self.geometry(f"{700}x{600}+{x}+{y - 50}")
 
         # Force focus
         self.focus_force()
@@ -44,7 +45,7 @@ class GUI(tk.Tk):
 
         # Tab creation
         self.notebook1 = ttk.Notebook(self)
-        self.notebook1.place(x=0, y=0, width=700, height=500)
+        self.notebook1.place(x=0, y=0, width=700, height=600)
         self._tab_notebook1_0 = tk.Frame(self.notebook1)
         self.notebook1.add(self._tab_notebook1_0,
                            text="Enter Customer Information")
@@ -86,6 +87,13 @@ class GUI(tk.Tk):
         self.creditCardNumber = ttk.Entry(self._tab_notebook1_0)
         self.creditCardNumber.place(x=176, y=312, width=448, height=50)
 
+        self.birthDateLabel = tk.Label(
+            self._tab_notebook1_0, text="Birth Date\n (YYYY-MM-DD)")
+        self.birthDateLabel.place(x=40, y=380)
+
+        self.birthDate = ttk.Entry(self._tab_notebook1_0)
+        self.birthDate.place(x=176, y=382, width=448, height=50)
+
         # Button creation
         self.submitButton = ttk.Button(
             self._tab_notebook1_0,
@@ -94,7 +102,7 @@ class GUI(tk.Tk):
             takefocus=False,
             command=self._confirm_button_action,
         )
-        self.submitButton.place(x=176, y=392, width=448, height=30)
+        self.submitButton.place(x=176, y=452, width=448, height=30)
 
         self.generateCustomerInfoButton = ttk.Button(
             self._tab_notebook1_1,
@@ -104,6 +112,10 @@ class GUI(tk.Tk):
         )
         self.generateCustomerInfoButton.place(
             x=125, y=100, width=448, height=100)
+
+        self.customerInfoLocationTipLabel = ttk.Label(self._tab_notebook1_1,
+                                                      text="Customer Info Location:\n ~/Documents/customer_info.csv")
+        self.customerInfoLocationTipLabel.place(x=125, y=200, width=448, height=50)
 
     # Methods
 
@@ -126,15 +138,23 @@ class GUI(tk.Tk):
                 self.city.get().strip(),
                 self.postalCode.get().strip(),
                 self.creditCardNumber.get().strip(),
+                self.birthDate.get().strip()
             )
         except backend.GUIError as e:
             messagebox.showerror(title="Error", message=f"{e}")
+        else:
+            self.firstName.delete(0, "end")
+            self.lastName.delete(0, "end")
+            self.city.delete(0, "end")
+            self.postalCode.delete(0, "end")
+            self.creditCardNumber.delete(0, "end")
+            self.birthDate.delete(0, "end")
 
     # Button handler for the generate data file button
     def _generate_button_action(self):
         try:
             backend.generateCustomerDataFile(
-                backend.customerInfo, "customer_info.csv")
+                backend.customerInfo, os.path.expanduser("~/Documents/customer_info.csv"))
         except backend.GUIError as e:
             messagebox.showerror(title="Error", message=f"{e}")
 

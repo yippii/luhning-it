@@ -1,6 +1,7 @@
 import csv
 import os
 import subprocess
+from datetime import datetime
 
 
 # Input Error Messages
@@ -15,7 +16,7 @@ customerInfo = list()
 # Get line count to get amount of customer
 try:
     customer_info_file = open(
-        file="customer_info.csv",
+        file=os.path.expanduser("~/Documents/customer_info.csv"),
         mode="r",
         newline="",
         encoding="utf-8",
@@ -23,7 +24,7 @@ try:
     )
 except FileNotFoundError:
     customer_info_file = open(
-        "customer_info.csv", mode="w+", newline="", encoding="utf-8", errors="replace"
+        os.path.expanduser("~/Documents/customer_info.csv"), mode="w+", newline="", encoding="utf-8", errors="replace"
     )
 customer_number = sum(1 for line in customer_info_file)
 customer_number += 1 if customer_number == 0 else 0
@@ -119,7 +120,7 @@ def luhn_check(numbers: str) -> bool:
 
 # Called by main application through option 1
 def enterCustomerInfo(
-    firstName: str, lastName: str, city: str, postalCode: str, credit_card_number: str
+    firstName: str, lastName: str, city: str, postalCode: str, credit_card_number: str, birth_date: str
 ):
     """
     Provide a prompt for users to enter customer information
@@ -132,7 +133,7 @@ def enterCustomerInfo(
     # Create or read file
     try:
         customer_info_file = open(
-            file="customer_info.csv",
+            file=os.path.expanduser("~/Documents/customer_info.csv"),
             mode="r",
             newline="",
             encoding="utf-8",
@@ -140,7 +141,7 @@ def enterCustomerInfo(
         )
     except FileNotFoundError:
         customer_info_file = open(
-            "customer_info.csv",
+            os.path.expanduser("~/Documents/customer_info.csv"),
             mode="w+",
             newline="",
             encoding="utf-8",
@@ -162,6 +163,14 @@ def enterCustomerInfo(
     if not validateCreditCard(credit_card_number):
         raise GUIError("Please enter a valid credit card number")
 
+    try:
+        if not validateBirthDate(birth_date):
+            # Generic error
+            raise GUIError("Please enter a valid birth date\n (YYYY-MM-DD)")
+    # Specific error
+    except GUIError as e:
+        raise e
+
     # Increment customer number by 1 after completing the operation
     name = f"{customer_number}{firstName.lower()[:2]}{lastName.lower()[:2]}"
     customerInfo.append(
@@ -172,6 +181,7 @@ def enterCustomerInfo(
             city.lower().capitalize(),
             postalCode.upper(),
             credit_card_number,
+            birth_date
         ]
     )
     customer_number += 1
@@ -195,6 +205,56 @@ def validatePostalCode(postal_code: str) -> bool:
 def validateCreditCard(credit_card_number: str) -> bool:
     return luhn_check(credit_card_number)
 
+def validateBirthDate(birth_date: str) -> bool:
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+    current_day = datetime.now().day
+
+    try:
+        # Format
+        if (len(birth_date) != 10
+            or birth_date[4] != '-'
+            or birth_date[7] != '-'
+        ):
+            return False
+
+        # Year
+        if (not birth_date[:4].isdigit()
+            or not int(birth_date[:4])>0
+            or not int(birth_date[:4])<=current_year
+        ):
+            raise GUIError("Please enter a valid birth date\n(YYYY-MM-DD)\n\nIncorrect year")
+
+        # Month
+        if (not birth_date[5:7].isdigit()
+            or not int(birth_date[5:7])>0
+            or not int(birth_date[5:7])<13
+        ):
+            raise GUIError("Please enter a valid birth date\n(YYYY-MM-DD)\n\nIncorrect month")
+
+        # Date
+        if (not birth_date[8:10].isdigit()
+            or not int(birth_date[8:10])>0
+            or not int(birth_date[8:10])<32
+        ):
+            raise GUIError("Please enter a valid birth date\n(YYYY-MM-DD)\n\nIncorrect date")
+
+       # More than current date
+        if (int(birth_date[:4]) == current_year
+            and int(birth_date[5:7]) > current_month
+
+            or int(birth_date[:4]) == current_year
+            and int(birth_date[5:7]) == current_month
+            and int(birth_date[8:10]) > current_day
+        ):
+            raise GUIError("Please enter a valid birth date\n(YYYY-MM-DD)\n\nDate higher than today's date")
+
+        return True
+    except ValueError:
+        return False
+    except GUIError as e:
+        raise e
+
 
 # Called by GUI through notebook1_1
 def generateCustomerDataFile(content: list[str], filename: str):
@@ -204,13 +264,15 @@ def generateCustomerDataFile(content: list[str], filename: str):
                 file=filename, mode="a", newline="", encoding="utf-8", errors="replace"
             ) as csv_file:
                 if os.path.getsize(filename) == 0:
-                    csv.writer(csv_file, delimiter="|").writerow(
+                    csv.writer(csv_file, delimiter=",").writerow(
                         [
                             "Customer ID",
                             "First Name",
                             "Last Name",
                             "City",
                             "Postal Code",
+                            "Credit Card Number",
+                            "Birth Date"
                         ]
                     )
 
