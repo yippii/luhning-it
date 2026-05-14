@@ -41,7 +41,7 @@ class GUI(tk.Tk):
         # Segoe UI Font
         default_font = font.nametofont("TkDefaultFont")
         default_font.configure(family="Segoe UI Variable",
-                               size=17, weight="normal")
+                               size=15, weight="normal")
 
         # Tab creation
         self.notebook1 = ttk.Notebook(self)
