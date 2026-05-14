@@ -31,6 +31,9 @@ jobs:
           output-dir: .
           output-file: customer-system
           macos-app-name: "Customer System"
+          macos-app-icon: "yippie.icns"
+          windows-icon-from-ico: "yippie.ico"
+          linux-icon: "yippie.png"
           
       - name: Uploading artifact
         uses: actions/upload-artifact@v7
