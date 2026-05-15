@@ -6,7 +6,7 @@
 
 ## 📋 Business Overview
 
-This project is a robust, modular Python application designed for a Canadian retail company to manage customer data and validate sensitive information. The system focuses on ensuring data integrity through custom validation rules for Canadian postal codes and credit card numbers using the **Luhn Algorithm**.
+This project is a robust, modular Python application designed to manage customer data and validate sensitive information. The system focuses on ensuring data integrity through custom validation rules for Canadian postal codes and credit card numbers using the **Luhn Algorithm**.
 
 ## 🚀 Features
 
@@ -37,22 +37,12 @@ The core of the security validation is the Luhn Algorithm, a checksum formula us
 
 ## 📂 Project Structure
 
-* `Main.java` / `main.py`: The driver of the application containing the menu interface.
-* `Customer`: Class/Module handling customer attributes and ID generation logic.
-* `Validator`: Contains static methods for Postal Code file checking and the Luhn Algorithm.
+* `main.py`: The driver of the application containing the menu interface.
 * `postal_codes.csv`: Reference file for Canadian postal regions.
 
 ---
 
-## 📝 Requirements & Validation Rules
-
-### Customer Input
-
-| Field | Requirement | Validation Rule |
-| --- | --- | --- |
-| **First/Last Name** | String | Required |
-| **Postal Code** | String | Min 3 chars; Must exist in `postal_codes.csv` |
-| **Credit Card** | String | Min 9 digits; Must pass Luhn Check |
+## 📝 Validation Rules
 
 ### ID Generation Pattern
 
@@ -65,30 +55,4 @@ The system generates IDs based on the sequence and name:
 ---
 
 ## ⚙️ Installation & Usage
-
-1. **Clone the repository:**
-```bash
-git clone https://github.com/yippii/luhning-it.git
-
-```
-
-
-2. **Ensure `postal_codes.csv` is in the root directory.**
-3. **Run the application:**
-
-```bash
-    python main.py
-    ```
-4.  **Exporting Data:** Choose option `2` in the menu to save your data to a custom `.csv` file.
-
----
-
-## 🛠️ Technical Standards
-*   **Modularity:** Logic is separated into distinct functions to allow concurrent development and easier testing.
-*   **Documentation:** All methods include Javadoc/Docstring style headers explaining inputs, outputs, and dependencies.
-*   **Error Handling:** Includes checks for file availability and invalid keyboard inputs.
-
----
-*Note: This project was developed as part of a technical assignment to demonstrate proficiency in data validation and modular software design.*
-
-```
+* Go to GitHub Actions and retrieve the latest version of artifacts for the appropriate operating system.
