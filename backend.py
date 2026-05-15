@@ -4,34 +4,30 @@ import sys
 import subprocess
 from datetime import datetime
 
-#music
-import threading
 import pygame
+import pygame.mixer
 
+# Music playback
 def escalator_music(filepath: str):
-    def _play():
-        pygame.init()
-        pygame.mixer.init()
-        pygame.mixer.music.load(filepath)
-        pygame.mixer.music.play(-1)
-
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(10)
-
-    thread = threading.Thread(target=_play, daemon=True)
-    thread.start()
-
+    pygame.mixer.init()
+    pygame.mixer.music.load(filepath)
+    pygame.mixer.music.play(-1)
 
 # Input Error Messages
 class GUIError(Exception):
     def __init__(self, message):
         super().__init__(message)
 
-
+# Customer info is a list that stores all customer information
+# before user generate the data file, which would then clear it
 customerInfo = list()
 
 
 # Get line count to get amount of customer
+
+# Stores in the User Documents folder as it is packaged as an application
+# and would not be viable to store it internally inside the Temp folder
+# for the executable or in an obscured folder
 try:
     customer_info_file = open(
         file=os.path.expanduser("~/Documents/customer_info.csv"),
