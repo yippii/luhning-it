@@ -27,7 +27,9 @@ jobs:
           mode: app
           include-module: pygame.mixer
           enable-plugins: tk-inter
-          include-data-files: '*.csv=postal_codes.csv'
+          include-data-files: |
+            '*.csv=postal_codes.csv'
+            '*.mp3=escalator music.mp3'
           output-dir: .
           output-file: customer-system
           macos-app-name: "Customer System"
