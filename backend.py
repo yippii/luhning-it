@@ -7,16 +7,26 @@ import pygame
 import pygame.mixer
 
 
-# Music playback
+# Music
 def escalator_music(filepath: str):
+
+    # Pre-initialize the mixer with a larger buffer to prevent stuttering
+    pygame.mixer.pre_init(44100, -16, 2, 2048)
     pygame.mixer.init()
+    
     if "__compiled__" in globals():
         filepath = f"{os.path.dirname(sys.executable)}/{filepath}"
         print(
             f"[DEBUG] Audio Subsystem - Detected Nuitka Compiled Application, using {filepath} instead"
         )
-    pygame.mixer.music.load(filepath)
-    pygame.mixer.music.play(-1)
+        
+    try:
+        pygame.mixer_music.set_volume(0.5) # Adjust volume level (0.0 to 1.0)
+        pygame.mixer.music.load(filepath)
+        # -1 loops indefinitely. 
+        pygame.mixer.music.play(-1) 
+    except pygame.error as e:
+        print(f"[ERROR] Could not play audio file: {e}")
 
 
 # Input Error Messages
@@ -304,5 +314,4 @@ def generateCustomerDataFile(content: list[str], filename: str):
             "Please enter customer information before using this function")
 
 
-escalator_music("escalator music.mp3")
-
+escalator_music("escalator music.ogg")
