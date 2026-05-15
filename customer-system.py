@@ -1,6 +1,5 @@
 import os.path
 import tkinter as tk
-from tkinter import font
 from tkinter import ttk
 from tkinter import messagebox
 
@@ -101,7 +100,9 @@ class GUI(tk.Tk):
         )
         self.submitButton.place(x=176, y=452, width=448, height=30)
 
-        self.customerInfoLocationLabel = ttk.Label(self._tab_notebook1_1, text="Path to save")
+        self.customerInfoLocationLabel = ttk.Label(
+            self._tab_notebook1_1, text="Path to save"
+        )
         self.customerInfoLocationLabel.place(x=125, y=32, width=448, height=50)
 
         self.customerInfoLocation = ttk.Entry(self._tab_notebook1_1)
@@ -190,20 +191,26 @@ class GUI(tk.Tk):
     # Button handler for the generate data file button
     def _generate_button_action(self):
         try:
-            if self.customerInfoLocation.get().strip() == "" or self.customerInfoLocation.get().strip()[-4:] != ".csv":
-                print(self.customerInfoLocation.get().strip()[-4:])
+            if (
+                self.customerInfoLocation.get().strip() == ""
+                or self.customerInfoLocation.get().strip()[-4:] != ".csv"
+            ):
                 raise backend.GUIError("Please enter a valid customer info path")
+
             backend.generateCustomerDataFile(
                 backend.customerInfo,
-                os.path.expanduser("~/Documents/"+self.customerInfoLocation.get()),
+                os.path.expanduser(
+                    "~/Documents/" + self.customerInfoLocation.get()),
             )
+
         except backend.GUIError as e:
             messagebox.showerror(title="Error", message=f"{e}")
-            if str(e) == "Please enter a valid customer info path":
-                self.customerInfoLocation.state(["invalid"])
+            self.customerInfoLocation.state(["invalid"])
+
         else:
             self.customerInfoLocation.state(["!invalid"])
             self.customerInfoLocation.delete(0, "end")
+
 
 if __name__ == "__main__":
     app = GUI()
