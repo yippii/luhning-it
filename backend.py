@@ -10,6 +10,9 @@ import pygame.mixer
 # Music playback
 def escalator_music(filepath: str):
     pygame.mixer.init()
+    if "__compiled__" in globals():
+        filepath = os.path.dirname(sys.executable) + filepath
+        print(f"[DEBUG] Audio Subsystem - Detected Nuitka Compiled Application, using {filepath} instead")
     pygame.mixer.music.load(filepath)
     pygame.mixer.music.play(-1)
 
@@ -210,7 +213,7 @@ def validatePostalCode(postal_code: str) -> bool:
     try:
         if "__compiled__" in globals():
             path = os.path.dirname(sys.executable)+"/postal_codes.csv"
-            print(f"Detected Nuitka Compiled Application, using {path} instead")
+            print(f"[DEBUG] CSV Parse - Detected Nuitka Compiled Application, using {path} instead")
         else:
             path = "postal_codes.csv"
         postalCodes = parseCSV(path)
