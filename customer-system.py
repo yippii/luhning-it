@@ -101,6 +101,7 @@ class GUI(tk.Tk):
             default="active",
             takefocus=False,
             command=self._confirm_button_action,
+            style="Accent.TButton"
         )
         self.submitButton.place(x=176, y=452, width=448, height=30)
 
@@ -109,6 +110,7 @@ class GUI(tk.Tk):
             text="Generate Customer File",
             takefocus=False,
             command=self._generate_button_action,
+            style="Accent.TButton"
         )
         self.generateCustomerInfoButton.place(
             x=125, y=100, width=448, height=100)
