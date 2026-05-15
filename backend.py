@@ -4,6 +4,23 @@ import sys
 import subprocess
 from datetime import datetime
 
+#music
+import threading
+import pygame
+
+def escalator_music(filepath: str):
+    def _play():
+        pygame.init()
+        pygame.mixer.init()
+        pygame.mixer.music.load(filepath)
+        pygame.mixer.music.play(-1)
+
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
+
+    thread = threading.Thread(target=_play, daemon=True)
+    thread.start()
+
 
 # Input Error Messages
 class GUIError(Exception):
@@ -292,3 +309,5 @@ def generateCustomerDataFile(content: list[str], filename: str):
         raise GUIError(
             "Please enter customer information before using this function")
 
+
+escalator_music("escalator music.mp3")
