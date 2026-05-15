@@ -88,7 +88,8 @@ class GUI(tk.Tk):
         self.creditCardNumber.place(x=176, y=312, width=448, height=50)
 
         self.birthDateLabel = tk.Label(
-            self._tab_notebook1_0, text="Birth Date\n (YYYY-MM-DD)")
+            self._tab_notebook1_0, text="Birth Date\n (YYYY-MM-DD)"
+        )
         self.birthDateLabel.place(x=40, y=380)
 
         self.birthDate = ttk.Entry(self._tab_notebook1_0)
@@ -101,7 +102,7 @@ class GUI(tk.Tk):
             default="active",
             takefocus=False,
             command=self._confirm_button_action,
-            style="Accent.TButton"
+            style="Accent.TButton",
         )
         self.submitButton.place(x=176, y=452, width=448, height=30)
 
@@ -110,14 +111,17 @@ class GUI(tk.Tk):
             text="Generate Customer File",
             takefocus=False,
             command=self._generate_button_action,
-            style="Accent.TButton"
+            style="Accent.TButton",
         )
         self.generateCustomerInfoButton.place(
             x=125, y=100, width=448, height=100)
 
-        self.customerInfoLocationTipLabel = ttk.Label(self._tab_notebook1_1,
-                                                      text="Customer Info Location:\n ~/Documents/customer_info.csv")
-        self.customerInfoLocationTipLabel.place(x=125, y=200, width=448, height=50)
+        self.customerInfoLocationTipLabel = ttk.Label(
+            self._tab_notebook1_1,
+            text="Customer Info Location:\n ~/Documents/customer_info.csv",
+        )
+        self.customerInfoLocationTipLabel.place(
+            x=125, y=200, width=448, height=50)
 
     # Methods
 
@@ -140,7 +144,7 @@ class GUI(tk.Tk):
                 self.city.get().strip(),
                 self.postalCode.get().strip(),
                 self.creditCardNumber.get().strip(),
-                self.birthDate.get().strip()
+                self.birthDate.get().strip(),
             )
         except backend.GUIError as e:
             messagebox.showerror(title="Error", message=f"{e}")
@@ -156,7 +160,9 @@ class GUI(tk.Tk):
     def _generate_button_action(self):
         try:
             backend.generateCustomerDataFile(
-                backend.customerInfo, os.path.expanduser("~/Documents/customer_info.csv"))
+                backend.customerInfo,
+                os.path.expanduser("~/Documents/customer_info.csv"),
+            )
         except backend.GUIError as e:
             messagebox.showerror(title="Error", message=f"{e}")
 
@@ -165,4 +171,3 @@ if __name__ == "__main__":
     app = GUI()
     sv_ttk.set_theme("dark")
     app.mainloop()
-
