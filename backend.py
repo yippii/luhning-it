@@ -8,6 +8,7 @@ import pygame.mixer
 
 
 # Music
+#goated music by nathan c and nicky m
 def escalator_music(filepath: str):
 
     # Pre-initialize the mixer with a larger buffer to prevent stuttering
