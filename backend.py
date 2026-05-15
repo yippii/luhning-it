@@ -11,7 +11,7 @@ import pygame.mixer
 def escalator_music(filepath: str):
     pygame.mixer.init()
     if "__compiled__" in globals():
-        filepath = os.path.dirname(sys.executable) + filepath
+        filepath = f"{os.path.dirname(sys.executable)}/{filepath}"
         print(f"[DEBUG] Audio Subsystem - Detected Nuitka Compiled Application, using {filepath} instead")
     pygame.mixer.music.load(filepath)
     pygame.mixer.music.play(-1)
