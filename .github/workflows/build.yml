@@ -29,7 +29,7 @@ jobs:
           enable-plugins: tk-inter
           include-data-files: |
             '*.csv=postal_codes.csv'
-            '*.mp3=escalator music.mp3'
+            '*.ogg=escalator music.ogg'
           output-dir: .
           output-file: customer-system
           macos-app-name: "Customer System"
